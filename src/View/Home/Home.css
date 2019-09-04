@@ -82,3 +82,14 @@ Button {
     100%{background-position:82% 0%}
 }
   
+@media (max-width: 1400px) {
+  .title {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 700px) {
+  .title {
+    font-size: 30px;
+  }
+}

@@ -166,7 +166,7 @@ export default class Home extends Component{
                 alignItems="center"
                 justify="center"
             style={{ minHeight: '100vh' }}>
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={10}>
                 <h1 className="title">GitView</h1>
                 <Grid container justify = "center">
                     <Input autoFocus={true} placeholder="Repository to search" onChange={this.handleChange}/>
