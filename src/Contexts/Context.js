@@ -6,7 +6,7 @@ export const RepoListContext = React.createContext();
 export default class RepoListProvider extends Component {
     state = {
         test: 42,
-        repoList: [],
+        repoList: test.items,
         updateRepoList: (newRepoList) => this.setState({repoList: newRepoList})
     }
 

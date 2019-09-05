@@ -10,7 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
-import { Redirect } from 'react-router'
+import { Link, Redirect } from 'react-router'
 import './ReposDashboard.css'
 
 export default class ReposDashboard extends Component{
@@ -68,13 +68,13 @@ export default class ReposDashboard extends Component{
                 justify="center"
                 style={{ minHeight: '100vh' }}
             >
-            {this.context.state.repoList.length == 0 ? <Redirect to='/' /> : null}
-            <Grid item xs={3}>
-                <h1 className="title">GitView</h1>
-            </Grid>
-            {repoList.map((key, index) => {
+                {this.context.state.repoList.length == 0 ? <Redirect to='/' /> : null}
+                <Grid item xs={3}>
+                    <h1 className="title">GitView</h1>
+                </Grid>
+                {repoList.map((key, index) => {
                 return (
-                <ExpansionPanel key={key.id} style={{maxWidth: '60vw', minWidth: '60vw'}}>
+                <ExpansionPanel key={key.id} xs={6} sm={6} style={{minWidth:"75%", maxWidth: "75%"}}>
                     <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
@@ -89,21 +89,26 @@ export default class ReposDashboard extends Component{
                     </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Divider variant="middle" orientation="vertical"/>
                     {
                         this.state.contributors[index] ?
                             this.state.contributors[index].map((key, index) => {
-                                return (<Tooltip key={key.id} title={key.login}><Avatar  alt='Avatar' size="small"src={key.avatar_url}/></Tooltip>)
+                                return (<Tooltip key={key.id} title={key.login}>
+                                            <Avatar  alt='Avatar' size="small"src={key.avatar_url}/>
+                                        </Tooltip>)
                             }) : null
                     }
+                    <Divider variant="middle" orientation="vertical"/>
+                    <div> {this.state.branches[index] ? `${this.state.branches[index].length} branch` : null}
                     {
                         this.state.branches[index] ?
                             this.state.branches[index].map((key, index) => {
-                                return (<Typography variant='subtitle2'>
+                                return (<Typography key={key.nodes_id + '' + index} variant='subtitle2'>
                                             {key.name}
+                                            
                                         </Typography>)
                             }) : null
                     }
+                    </div>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
                 )
