@@ -8,6 +8,9 @@ import StarBorderRoundedIcon from '@material-ui/icons/StarBorderRounded';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Avatar from '@material-ui/core/Avatar';
+import Tooltip from '@material-ui/core/Tooltip';
+import Divider from '@material-ui/core/Divider';
+import { Redirect } from 'react-router'
 import './ReposDashboard.css'
 
 export default class ReposDashboard extends Component{
@@ -15,17 +18,47 @@ export default class ReposDashboard extends Component{
         super()
 
         this.state = {
-            currentRepo: 1
+            currentRepo: 1,
+            fetchingbranches: false,
+            fetchContributors: false,
+            contributors: [],
+            branches: []
         }
+
+        this.fetchContributors = this.fetchContributors.bind(this);
+        this.fetchbranches = this.fetchbranches.bind(this);
     }
 
-    componentWillMount() {
-        this.setState({
-            repoList: this.context.state.repoList
+    fetchContributors() {
+        this.setState({fetchingContributors: true });
+        this.context.state.repoList.map((key, index) => {
+            fetch(key.contributors_url)
+            .then((res) => res.json())
+            .then((json) => this.setState({contributors: [...this.state.contributors, json]}))
+            .catch((err) => console.log(err))
         })
     }
+
+    fetchbranches() {
+        this.setState({fetchingbranches: true });
+        this.context.state.repoList.map((key, index) => {
+            key.branches_url = key.branches_url.slice(0, key.branches_url.length -9);
+            fetch(key.branches_url)
+            .then((res) => res.json())
+            .then((json) => this.setState({branches: [...this.state.branches, json]}))
+            .catch((err) => console.log(err))
+        })
+    }
+
+
+    componentWillMount() {
+        this.fetchContributors()
+        this.fetchbranches()
+        console.log(this.state)
+    }
+
     render() {
-        console.log(this.context.state.repoList)
+        let repoList = this.context.state.repoList
         return (
             <Grid
                 container
@@ -35,10 +68,11 @@ export default class ReposDashboard extends Component{
                 justify="center"
                 style={{ minHeight: '100vh' }}
             >
+            {this.context.state.repoList.length == 0 ? <Redirect to='/' /> : null}
             <Grid item xs={3}>
                 <h1 className="title">GitView</h1>
             </Grid>
-            {this.state.repoList.map((key, index) => {
+            {repoList.map((key, index) => {
                 return (
                 <ExpansionPanel key={key.id} style={{maxWidth: '60vw', minWidth: '60vw'}}>
                     <ExpansionPanelSummary
@@ -47,15 +81,29 @@ export default class ReposDashboard extends Component{
                     id="panel1a-header"
                     >
                     <Avatar alt='Avatar' src={key.owner.avatar_url} style={{marginRight: '5vw'}}/> 
-                    <Typography >{key.full_name}
-                        <br />
-                    </Typography>
-                    <Typography variant='subtitle2' style={{paddingRight: "10px"}}>{key.stargazers_count}</Typography><StarBorderRoundedIcon/>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                    <Typography variant='h6'>{key.full_name}
                     <Typography variant='subtitle1' xs={10}>
                         {key.description}
                     </Typography>
+                    <Typography variant='subtitle2' style={{paddingRight: "10px"}}>{key.stargazers_count}<StarBorderRoundedIcon color="primary" style={{display: "inline"}}/></Typography>
+                    </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Divider variant="middle" orientation="vertical"/>
+                    {
+                        this.state.contributors[index] ?
+                            this.state.contributors[index].map((key, index) => {
+                                return (<Tooltip key={key.id} title={key.login}><Avatar  alt='Avatar' size="small"src={key.avatar_url}/></Tooltip>)
+                            }) : null
+                    }
+                    {
+                        this.state.branches[index] ?
+                            this.state.branches[index].map((key, index) => {
+                                return (<Typography variant='subtitle2'>
+                                            {key.name}
+                                        </Typography>)
+                            }) : null
+                    }
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
                 )

@@ -12,62 +12,7 @@
     animation: hue 10s ease infinite;
 }
 
-Button {
-    padding-left: 10px;
-}
-
-.listRepos {
-    padding-left: 25%;
-    padding-right: 25%;
-}
-
-.errorMessage {
-    color: red;
-}
-
-.loadingAnim {
-    display: inline-block;
-    position: relative;
-    width: 64px;
-    height: 64px;
-  }
-
-  .loadingAnim div {
-    display: inline-block;
-    position: absolute;
-    left: 6px;
-    width: 13px;
-    background: #cef;
-    animation: loadingAnim 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
-  }
-
-  .loadingAnim div:nth-child(1) {
-    left: 6px;
-    animation-delay: -0.24s;
-  }
-
-  .loadingAnim div:nth-child(2) {
-    left: 26px;
-    animation-delay: -0.12s;
-  }
-
-  .loadingAnim div:nth-child(3) {
-    left: 45px;
-    animation-delay: 0;
-  }
-
-  @keyframes loadingAnim {
-    0% {
-      top: 6px;
-      height: 51px;
-    }
-    50%, 100% {
-      top: 19px;
-      height: 26px;
-    }
-  }
-  
-  @-webkit-keyframes hue {
+@-webkit-keyframes hue {
     from {
       -webkit-filter: hue-rotate(0deg);
     }
@@ -76,7 +21,7 @@ Button {
     }
   }
 
-  @keyframes hue {
+@keyframes hue {
     0%{background-position:82% 0%}
     50%{background-position:19% 100%}
     100%{background-position:82% 0%}
