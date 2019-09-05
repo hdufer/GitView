@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import "./Home.css"
+import "./Home.css";
+import { RepoListContext } from '../../Contexts/Context'
 import { Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Checkbox } from '@material-ui/core';
@@ -11,9 +12,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
-import { Fade } from '@material-ui/core';
 
 export default class Home extends Component{
+
     constructor()
     {
         super();
@@ -36,6 +37,8 @@ export default class Home extends Component{
         this.handleLinkClick  = this.handleLinkClick.bind(this);
         this.handleReposButton  = this.handleReposButton.bind(this);
     }
+
+    
 
     fetchGithubApi() {
         if (!this.state.wordList)
@@ -147,6 +150,7 @@ export default class Home extends Component{
             this.setState({
                 linkDisabled: false
             })
+            this.context.state.updateRepoList(this.state.repoList);
         }
     }
 
@@ -170,7 +174,7 @@ export default class Home extends Component{
             <Grid item xs={12} sm={10}>
                 <h1 className="title">GitView</h1>
                 <Grid container justify = "center">
-                    <Input autoFocus={true} placeholder="Repository to search" onChange={this.handleChange}/>
+                    <Input autoFocus={true}  placeholder="Repository to search" onChange={this.handleChange}/>
                     <Link to="/reposdashboard" params={this.state.repoList} onClick={this.handleLinkClick} style={{textDecoration: 'none'}}>
                         <Button variant="outlined" disabled={this.state.repoList.length == 0 ? true : false} color="primary">
                             Send
@@ -181,8 +185,9 @@ export default class Home extends Component{
                             Repos({this.state.repoList.length})
                     </Button>
                 </Grid>
-                <List dense className="listRepos">
+                    <List dense className="listRepos">
                 {
+                // Just verify is the repoList is open if yes display repolist if not display the list from the research
                 this.state.repoListOpen ? this.state.repoList.map((key, index) => {
                     return (
                         <ListItem  className="checkboxDiv" key={key.id + key}>
@@ -208,7 +213,6 @@ export default class Home extends Component{
                     let objArray = this.state.reposFromAPI[key];
                     let tabRet = [];
                     for (let i = 0; i < objArray.length; i++) {
-                        console.log(objArray[i])
                         tabRet.push(
                         <ListItem  className="checkboxDiv" key={objArray[i].id + key}>
                             <ListItemAvatar>
@@ -232,14 +236,16 @@ export default class Home extends Component{
                         
                     return tabRet;
                 })}
-                </List>
+                    </List>
                 </Grid>
                 <br/>
                 {this.state.linkDisabled ? <p className="errorMessage">You need to select at least one repository to send to the dashboard</p> : null}
                 {this.state.fetchingAPI ? <div className="loadingAnim"><div></div><div></div><div></div></div> : null}
-                </Grid>
-            </div>
+            </Grid>
+        </div>
         )
     }
 
 }
+
+Home.contextType = RepoListContext;
