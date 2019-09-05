@@ -9,8 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
-import Divider from '@material-ui/core/Divider';
-import { Link, Redirect } from 'react-router'
+import { Redirect } from 'react-router-dom';
 import './ReposDashboard.css'
 
 export default class ReposDashboard extends Component{
@@ -54,7 +53,6 @@ export default class ReposDashboard extends Component{
     componentWillMount() {
         this.fetchContributors()
         this.fetchbranches()
-        console.log(this.state)
     }
 
     render() {
@@ -81,36 +79,35 @@ export default class ReposDashboard extends Component{
                     id="panel1a-header"
                     >
                     <Avatar alt='Avatar' src={key.owner.avatar_url} style={{marginRight: '5vw'}}/> 
-                    <Typography variant='h6'>{key.full_name}
+                    <Typography variant='h6'><a href={key.html_url} style={{textDecoration: 'none', color:'black'}}>{key.full_name}</a>
                     <Typography variant='subtitle1' xs={10}>
                         {key.description}
                     </Typography>
-                    <Typography variant='subtitle2' style={{paddingRight: "10px"}}>{key.stargazers_count}<StarBorderRoundedIcon color="primary" style={{display: "inline"}}/></Typography>
+                    <Typography variant='subtitle2'>{key.stargazers_count}<StarBorderRoundedIcon color="primary" style={{display: "inline"}}/></Typography>
                     </Typography>
                 </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                <ExpansionPanelDetails style={{overflow: "hidden"}}>
                     {
                         this.state.contributors[index] ?
                             this.state.contributors[index].map((key, index) => {
                                 return (<Tooltip key={key.id} title={key.login}>
-                                            <Avatar  alt='Avatar' size="small"src={key.avatar_url}/>
+                                            <Avatar alt='Avatar' size="small"src={key.avatar_url}/>
                                         </Tooltip>)
                             }) : null
                     }
-                    <Divider variant="middle" orientation="vertical"/>
-                    <div> {this.state.branches[index] ? `${this.state.branches[index].length} branch` : null}
+                    <div>
+                        {this.state.branches[index] ? `${this.state.branches[index].length} branch` : null}
                     {
                         this.state.branches[index] ?
                             this.state.branches[index].map((key, index) => {
                                 return (<Typography key={key.nodes_id + '' + index} variant='subtitle2'>
                                             {key.name}
-                                            
                                         </Typography>)
                             }) : null
                     }
                     </div>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
                 )
             })}
             </Grid>
