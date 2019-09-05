@@ -11,6 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
+import { Fade } from '@material-ui/core';
 
 export default class Home extends Component{
     constructor()
@@ -170,7 +171,7 @@ export default class Home extends Component{
                 <h1 className="title">GitView</h1>
                 <Grid container justify = "center">
                     <Input autoFocus={true} placeholder="Repository to search" onChange={this.handleChange}/>
-                    <Link to="/reposdashboard" onClick={this.handleLinkClick} style={{textDecoration: 'none'}}>
+                    <Link to="/reposdashboard" params={this.state.repoList} onClick={this.handleLinkClick} style={{textDecoration: 'none'}}>
                         <Button variant="outlined" disabled={this.state.repoList.length == 0 ? true : false} color="primary">
                             Send
                         </Button>
